@@ -88,3 +88,17 @@ def sort_boxes(boxes, line_spacing=10):
 
     sorted_boxes = [box for line in lines for box in line]
     return np.array(sorted_boxes)
+
+
+def extract_letters_with_padding(img: np.ndarray, boxes: np.ndarray, pad=3) -> list:
+    letters = []
+    h, w = img.shape
+    for box in boxes:
+        label, min_y, min_x, max_y, max_x = box
+        min_y_p = max(min_y - pad, 0)
+        min_x_p = max(min_x - pad, 0)
+        max_y_p = min(max_y + pad, h - 1)
+        max_x_p = min(max_x + pad, w - 1)
+        letter_img = img[min_y_p:max_y_p + 1, min_x_p:max_x_p + 1]
+        letters.append(letter_img)
+    return letters
