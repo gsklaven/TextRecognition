@@ -4,6 +4,7 @@ import os
 import pickle
 import matplotlib.pyplot as plt
 
+
 def preprocess_letter(letter_img, size=(28, 28)):
     h, w = letter_img.shape
     scale = min(size[0] / h, size[1] / w)
@@ -15,8 +16,10 @@ def preprocess_letter(letter_img, size=(28, 28)):
     _, binarized = cv2.threshold(new_img, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
     return 255 - binarized  # letters white on black
 
+
 def mse(img1, img2):
     return np.mean((img1.astype("float") - img2.astype("float")) ** 2)
+
 
 def recognize_letter(letter_img, templates):
     best_score = float("inf")
@@ -28,6 +31,7 @@ def recognize_letter(letter_img, templates):
                 best_score = score
                 best_char = char
     return best_char, best_score
+
 
 def interactive_training(letters):
     trained_templates = {}
@@ -62,9 +66,11 @@ def interactive_training(letters):
 
     return trained_templates
 
+
 def save_templates(templates, path):
     with open(path, 'wb') as f:
         pickle.dump(templates, f)
+
 
 def load_templates(path):
     if os.path.exists(path):
@@ -72,6 +78,7 @@ def load_templates(path):
             return pickle.load(f)
     else:
         return {}
+
 
 def letters_to_text_interactive(sorted_boxes, letters, templates, save_path=None, mse_threshold=3000):
     """

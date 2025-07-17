@@ -10,23 +10,23 @@ from text_recognition_2 import connected_components
 from text_recognition import (
     bounding_box,
     sort_boxes,
-    extract_letters_with_padding
+    extract_letters
 )
 
 output_dir = "./outputs"
 os.makedirs(output_dir, exist_ok=True)
 
-# === Load and preprocess image ===
-img = cv2.imread('testing_images/', cv2.IMREAD_GRAYSCALE)
+img = cv2.imread('testing_images/test1.png', cv2.IMREAD_GRAYSCALE)
 blurred = cv2.GaussianBlur(img, (5, 5), 0)
-
 binary_img = cv2.adaptiveThreshold(
     blurred, 1, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 11, 8
 )
 
-# Morphological filtering για καθαρά γράμματα
+# Morphological opening για αφαίρεση θορύβου
 kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2))
 binary_img = cv2.morphologyEx(binary_img, cv2.MORPH_OPEN, kernel)
+
+# Προαιρετικό dilation για ενοποίηση θραυσμάτων χαρακτήρων
 binary_img = cv2.dilate(binary_img, kernel, iterations=1)
 
 # === Connected components ===
@@ -38,7 +38,7 @@ boxes = bounding_box(labels)
 sorted_boxes = sort_boxes(boxes)
 
 # ✨ Χρησιμοποιούμε padding όπως στο demo
-letters = extract_letters_with_padding(binary_img, sorted_boxes, pad=3)
+letters = extract_letters(binary_img, sorted_boxes, pad=3)
 print(f"Extracted {len(letters)} letters")
 
 # === Load or train templates ===

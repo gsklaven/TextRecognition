@@ -13,7 +13,7 @@ def connected_components(img) -> tuple:
 
     for y in range(h):
         for x in range(w):
-            if img[y,x] == 0:
+            if img[y, x] == 0:
                 continue
             else:
                 neighbors = []
