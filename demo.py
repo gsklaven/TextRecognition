@@ -2,21 +2,26 @@ import cv2
 import math
 import os
 import matplotlib.pyplot as plt
-from text_recognition import dfs_algorithm
-from text_recognition import bounding_box
-from text_recognition import extract_letters
-from text_recognition import sort_boxes
+from text_recognition import dfs_algorithm, bounding_box, extract_letters, sort_boxes
 from text_recognition_2 import connected_components
+
 
 plt.ioff()
 output_dir = "./outputs"
 os.makedirs(output_dir, exist_ok=True)
 
-img = cv2.imread('testing_images/maxresdefault.jpg', cv2.IMREAD_GRAYSCALE)
-blurred = cv2.GaussianBlur(img, (3, 3), 0)
+img = cv2.imread('testing_images/test1.png', cv2.IMREAD_GRAYSCALE)
+blurred = cv2.GaussianBlur(img, (5, 5), 0)
 binary_img = cv2.adaptiveThreshold(
-    img, 1, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 15, 10
+    blurred, 1, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 11, 8
 )
+
+# Morphological opening για αφαίρεση θορύβου
+kernel = cv2.getStructuringElement(cv2.MORPH_RECT, (2, 2))
+binary_img = cv2.morphologyEx(binary_img, cv2.MORPH_OPEN, kernel)
+
+# Προαιρετικό dilation για ενοποίηση θραυσμάτων χαρακτήρων
+binary_img = cv2.dilate(binary_img, kernel, iterations=1)
 
 # --- DFS Algorithm ---
 dfs_labels, dfs_count = dfs_algorithm(binary_img)
@@ -57,4 +62,4 @@ for i, letter in enumerate(cc_letters):
     if i == 0:
         plt.title('CC Letters')
 plt.tight_layout()
-plt.savefig(os.path.join(output_dir, f"text_recognition_results2.png"))
+plt.savefig(os.path.join(output_dir, f"text_recognition_results4.png"))

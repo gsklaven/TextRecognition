@@ -47,19 +47,6 @@ def bounding_box(labels: np.ndarray) -> np.ndarray:
     return np.array(boxes)
 
 
-def extract_letters(img: np.ndarray, boxes: np.ndarray) -> list:
-    """
-    This function extracts letters from the image based on the bounding boxes.
-    """
-    letters = []
-    for box in boxes:
-        label, min_y, min_x, max_y, max_x = box
-        letter_img = img[min_y:max_y + 1, min_x:max_x + 1]
-        letters.append(letter_img)
-
-    return letters
-
-
 def sort_boxes(boxes, line_spacing=10):
     """
     This function sorts the bounding boxes into lines based on their vertical position.
@@ -90,7 +77,10 @@ def sort_boxes(boxes, line_spacing=10):
     return np.array(sorted_boxes)
 
 
-def extract_letters_with_padding(img: np.ndarray, boxes: np.ndarray, pad=3) -> list:
+def extract_letters(img: np.ndarray, boxes: np.ndarray, pad=3) -> list:
+    """
+    This function extracts letters from the image based on the bounding boxes.
+    """
     letters = []
     h, w = img.shape
     for box in boxes:
