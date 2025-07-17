@@ -10,7 +10,7 @@ plt.ioff()
 output_dir = "./outputs"
 os.makedirs(output_dir, exist_ok=True)
 
-img = cv2.imread('testing_images/test1.png', cv2.IMREAD_GRAYSCALE)
+img = cv2.imread('testing_images/test2.jpg', cv2.IMREAD_GRAYSCALE)
 blurred = cv2.GaussianBlur(img, (5, 5), 0)
 binary_img = cv2.adaptiveThreshold(
     blurred, 1, cv2.ADAPTIVE_THRESH_MEAN_C, cv2.THRESH_BINARY_INV, 11, 8
@@ -62,4 +62,4 @@ for i, letter in enumerate(cc_letters):
     if i == 0:
         plt.title('CC Letters')
 plt.tight_layout()
-plt.savefig(os.path.join(output_dir, f"text_recognition_results4.png"))
+plt.savefig(os.path.join(output_dir, f"text_recognition_results2.png"))
